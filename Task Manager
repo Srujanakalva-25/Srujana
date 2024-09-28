@@ -1,0 +1,90 @@
+# Task Manager Application
+
+class Task:
+    def __init__(self, title, category, priority):
+        self.title = title
+        self.category = category
+        self.priority = priority
+        self.completed = False
+
+    def __str__(self):
+        status = "✓" if self.completed else "✗"
+        return f"{self.title} [{self.category}, Priority: {self.priority}] - Status: {status}"
+
+def display_menu():
+    print("\n--- Task Manager Menu ---")
+    print("1. View All Tasks")
+    print("2. Add Task")
+    print("3. Remove Task")
+    print("4. Mark Task as Completed")
+    print("5. Exit")
+
+def view_tasks(tasks):
+    if not tasks:
+        print("\nNo tasks available.")
+    else:
+        print("\n--- Task List ---")
+        for index, task in enumerate(tasks, start=1):
+            print(f"{index}. {task}")
+
+def add_task(tasks):
+    title = input("\nEnter task title: ")
+    category = input("Enter task category (e.g., Work, Personal): ")
+    try:
+        priority = int(input("Enter task priority (1-5, 1 = High, 5 = Low): "))
+        if 1 <= priority <= 5:
+            tasks.append(Task(title, category, priority))
+            print(f"'{title}' has been added to your tasks.")
+        else:
+            print("Priority must be a number between 1 and 5.")
+    except ValueError:
+        print("Invalid priority input. Please enter a number between 1 and 5.")
+
+def remove_task(tasks):
+    view_tasks(tasks)
+    try:
+        task_number = int(input("\nEnter the number of the task to remove: "))
+        if 1 <= task_number <= len(tasks):
+            removed_task = tasks.pop(task_number - 1)
+            print(f"'{removed_task.title}' has been removed from your tasks.")
+        else:
+            print("Invalid task number.")
+    except ValueError:
+        print("Please enter a valid number.")
+
+def mark_task_completed(tasks):
+    view_tasks(tasks)
+    try:
+        task_number = int(input("\nEnter the number of the task to mark as completed: "))
+        if 1 <= task_number <= len(tasks):
+            tasks[task_number - 1].completed = True
+            print(f"'{tasks[task_number - 1].title}' has been marked as completed.")
+        else:
+            print("Invalid task number.")
+    except ValueError:
+        print("Please enter a valid number.")
+
+def task_manager():
+    tasks = []
+    while True:
+        display_menu()
+        try:
+            choice = int(input("\nChoose an option: "))
+            if choice == 1:
+                view_tasks(tasks)
+            elif choice == 2:
+                add_task(tasks)
+            elif choice == 3:
+                remove_task(tasks)
+            elif choice == 4:
+                mark_task_completed(tasks)
+            elif choice == 5:
+                print("Exiting Task Manager. Goodbye!")
+                break
+            else:
+                print("Invalid option. Please choose a number between 1 and 5.")
+        except ValueError:
+            print("Please enter a valid number.")
+
+# Run the Task Manager Application
+task_manager()
